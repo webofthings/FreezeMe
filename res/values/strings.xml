@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title">FreezeMe!</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="scan">Scan QR code!</string>
+     <string name="readNfc">Read NFC tag!</string>
+    <string name="app_name">FreezeMe</string>
+    
+    <string name="title_scanned_tag">Tag</string>
+
+</resources>

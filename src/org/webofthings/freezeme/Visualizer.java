@@ -51,8 +51,8 @@ public class Visualizer extends Activity {
 	        final TextView lblDaysLeft = (TextView) findViewById(R.id.textView2);
 	        lblDaysLeft.setText(data.getExpiration());
 	        
-        	final Future<InputStream> imgFut = this.ex.submit(new ImageLoader(data.getImageUrl()));//new FakeFoodDAO())); // Ignore the Future<>
-        	Bitmap bitmap = BitmapFactory.decodeStream(imgFut.get());
+        	final Future<Bitmap> imgFut = this.ex.submit(new ImageLoader(data.getImageUrl()));//new FakeFoodDAO())); // Ignore the Future<>
+        	Bitmap bitmap = imgFut.get();
         	ImageView i = (ImageView)findViewById(R.id.imageView1);
         	i.setImageBitmap(bitmap);
 		} catch (InterruptedException e) {
@@ -87,7 +87,7 @@ public class Visualizer extends Activity {
 		}
 	}
 	
-	class ImageLoader implements Callable<InputStream> {
+	class ImageLoader implements Callable<Bitmap> {
 		String url;
 		
 		public ImageLoader(String url) {
@@ -95,9 +95,9 @@ public class Visualizer extends Activity {
 		}
 
 		@Override
-		public InputStream call() throws Exception {
+		public Bitmap call() throws Exception {
 	        try {
-	    	  return (InputStream)new URL(url).getContent();
+	    	  return BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
 	    	} catch (MalformedURLException e) {
 	    		Log.d(AppData.log, e.getMessage());
 	    	} catch (IOException e) {

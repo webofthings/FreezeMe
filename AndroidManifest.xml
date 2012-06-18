@@ -4,7 +4,7 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="9" />
+    <uses-sdk android:minSdkVersion="10" />
 
     <uses-permission android:name="android.permission.NFC" />
 
@@ -22,13 +22,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--  <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                <data
-                    android:host="www.tinyurl.com"
-                    android:scheme="http" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter> -->
         </activity>
        <activity
             android:name=".NfcExplicitReader" >
@@ -37,11 +30,23 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".NfcTriggeredReader" >
+        
+        <!--  Former triggered activity -->
+        <!-- <activity android:name=".NfcTriggeredReader" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <data
                     android:host="www.tinyurl.com"
+                    android:scheme="http" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity> -->
+        
+        <activity android:name=".Visualizer" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <data
+                    android:host="t.tn.gg"
                     android:scheme="http" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

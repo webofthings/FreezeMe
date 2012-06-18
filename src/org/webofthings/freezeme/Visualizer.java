@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.webofthings.freezeme.dao.AbstractFoodDAO;
-import org.webofthings.freezeme.dao.FakeFoodDAO;
+import org.webofthings.freezeme.dao.EvrythngFoodDAO;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,11 +35,32 @@ public class Visualizer extends Activity {
 		setContentView(R.layout.visualizer);
 		
 		//final Bundle receiveBundle = this.getIntent().getExtras();
-		final String uri = this.getIntent().getData().toString();
+		final String shortUri = this.getIntent().getData().toString();
 		
-		Log.d(AppData.log, uri);
+		Log.d(AppData.log, shortUri);
 		
-		this.ex.submit(new DataLoader(new FakeFoodDAO())); // Ignore the Future<>
+		final Future<AbstractFoodDAO> fut = this.ex.submit(new DataLoader(new EvrythngFoodDAO(shortUri)));//new FakeFoodDAO())); // Ignore the Future<>
+		try {
+			final AbstractFoodDAO data = fut.get();
+			
+			this.urlToAccessMoreInfo = data.getInfoUrl();
+	        
+	        final TextView lblName = (TextView) findViewById(R.id.textView1);
+	        lblName.setText(data.getName());
+	        
+	        final TextView lblDaysLeft = (TextView) findViewById(R.id.textView2);
+	        lblDaysLeft.setText(data.getExpiration());
+	        
+        	final Future<InputStream> imgFut = this.ex.submit(new ImageLoader(data.getImageUrl()));//new FakeFoodDAO())); // Ignore the Future<>
+        	Bitmap bitmap = BitmapFactory.decodeStream(imgFut.get());
+        	ImageView i = (ImageView)findViewById(R.id.imageView1);
+        	i.setImageBitmap(bitmap);
+		} catch (InterruptedException e) {
+			Log.d(AppData.log, e.getMessage());
+		} catch (ExecutionException e) {
+			Log.d(AppData.log, e.getMessage());
+		}
+		
     }
     
     public void goToURL(View v) {
@@ -49,7 +73,7 @@ public class Visualizer extends Activity {
 		super.onResume();
 	}
 	
-	class DataLoader implements Runnable {
+	class DataLoader implements Callable<AbstractFoodDAO> {
 		AbstractFoodDAO dao;
 		
 		public DataLoader(AbstractFoodDAO dao) {
@@ -57,28 +81,30 @@ public class Visualizer extends Activity {
 		}
 
 		@Override
-		public void run() {
-			this.dao.load();
-			
-	        //final Bundle receiveBundle = this.getIntent().getExtras();
-			Visualizer.this.urlToAccessMoreInfo = this.dao.getInfoUrl();
-	        
-	        final TextView lblName = (TextView) findViewById(R.id.textView1);
-	        lblName.setText(this.dao.getName());
-	        
-	        final TextView lblDaysLeft = (TextView) findViewById(R.id.textView2);
-	        lblDaysLeft.setText(this.dao.getExpiration());
-	        
+		public AbstractFoodDAO call() throws Exception {
+			this.dao.load();			
+	    	return this.dao;
+		}
+	}
+	
+	class ImageLoader implements Callable<InputStream> {
+		String url;
+		
+		public ImageLoader(String url) {
+			this.url = url;
+		}
+
+		@Override
+		public InputStream call() throws Exception {
 	        try {
-	    	  ImageView i = (ImageView)findViewById(R.id.imageView1);
-	    	  Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(this.dao.getImageUrl()).getContent());
-	    	  i.setImageBitmap(bitmap); 
+	    	  return (InputStream)new URL(url).getContent();
 	    	} catch (MalformedURLException e) {
 	    		Log.d(AppData.log, e.getMessage());
 	    	} catch (IOException e) {
 	    		Log.d(AppData.log, "Something went wrong loading the image");
 	    		Log.d(AppData.log, e.getMessage());
 	    	}
+	    	return null;
 		}
 	}
 }

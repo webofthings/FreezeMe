@@ -9,33 +9,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="3dp"
         android:text="name"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginBottom="3dp" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher"
-        android:layout_marginBottom="3dp" />
+        android:layout_marginBottom="3dp"
+        android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Days to expire"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginBottom="3dp" />
+        android:layout_marginBottom="3dp"
+        android:text="@string/expires"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ImageButton
-        android:id="@+id/imageButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@android:drawable/ic_dialog_info"
-        android:onClick="goToURL" />
+
+    <Button
+        android:id="@+id/button0"
+        style="@style/ButtonText"
+        android:layout_width="match_parent"
+        android:background="@drawable/bt_red"
+        android:text="@string/bt_info" 
+        android:onClick="goToURL">
+    </Button>
+    
+    
+    <Button
+        android:id="@+id/button1"
+        style="@style/ButtonText"
+        android:layout_width="match_parent"
+        android:background="@drawable/bt_red"
+        android:text="@string/bt_add" >
+    </Button>
+    
+    <Button
+        android:id="@+id/button2"
+        style="@style/ButtonText"
+        android:layout_width="match_parent"
+        android:background="@drawable/bt_red"
+        android:text="@string/bt_remove" >
+    </Button>
 
 </LinearLayout>

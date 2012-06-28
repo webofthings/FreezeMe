@@ -76,7 +76,7 @@ public class NfcExplicitReader extends Activity {
 	@Override
 	public void onNewIntent(Intent intent) {
 		Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
-		startActivity(FreezeMeActivity.checkAndGo(this, username, password, intent.getDataString(), true));
+		//startActivity(FreezeMeActivity.checkAndGo(this, username, password, intent.getDataString(), true));
 	}
 
 	@Override

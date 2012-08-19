@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 /**
- * This is the class in charge of reading NFC tags.
+ * This is the class in charge of reading NFC tags, it is triggered
+ * automatically
+ * by the Android system whenever a tag corresponding to what's specified in the
+ * AndroidManifest.xml
+ * is seen (e.g., tags with evrythng.net in our case).
  * 
  * @author Dominique Guinard (domguinard)
  **/
-
 public class NfcTriggeredReader extends Activity {
 
 	@Override

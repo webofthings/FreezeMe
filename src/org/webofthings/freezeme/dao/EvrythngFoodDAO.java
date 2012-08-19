@@ -1,3 +1,8 @@
+/*
+ * (c) Copyright 2012 EVRYTHNG Ltd London / Zurich
+ * www.evrythng.com
+ * 
+ */
 package org.webofthings.freezeme.dao;
 
 import java.text.SimpleDateFormat;
@@ -10,6 +15,14 @@ import com.evrythng.android.wrapper.evrythng.EvrythngV3Wrapper;
 import com.evrythng.android.wrapper.evrythng.model.v2.Property;
 import com.evrythng.android.wrapper.evrythng.model.v3.UrlBinding;
 
+/**
+ * 
+ * Loads the food data from the EVRYTHNG services, using the ThngDroid wrapper.
+ * 
+ * @author Aitor Gómez Goiri
+ * @author Dominique Guinard (domguinard)
+ * 
+ */
 public class EvrythngFoodDAO extends AbstractFoodDAO {
 	private static final String EVRYTHNG_ROOT_URL_V2 = "https://evrythng.net/";
 	private static final String API_KEY = "<GET-YOUR-API-KEY>";

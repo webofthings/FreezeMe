@@ -1,3 +1,7 @@
+/*
+ * (c) Copyright 2012 EVRYTHNG Ltd London / Zurich
+ * www.evrythng.com
+ */
 package org.webofthings.freezeme;
 
 import java.io.IOException;
@@ -26,6 +30,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * 
+ * This class is the activity displaying information about the scanned food
+ * item.
+ * It also allows the user to add a food item to our fridge hosted on EVRYTHNG
+ * services.
+ * 
+ * @author Aitor Gómez Goiri
+ * @author Dominique Guinard (domguinard)
+ * 
+ */
 public class FoodVisualizer extends Activity {
 	String urlToAccessMoreInfo = "http://";
 	String uriInTag;
@@ -73,6 +88,7 @@ public class FoodVisualizer extends Activity {
 	}
 
 	protected Button.OnClickListener addButtonListener = new Button.OnClickListener() {
+		@Override
 		public void onClick(View v) {
 			final Future<AbstractFoodDAO> fut = ex.submit(new AddFood(new EvrythngFoodDAO(uriInTag)));
 			try {
@@ -93,6 +109,7 @@ public class FoodVisualizer extends Activity {
 	};
 
 	protected Button.OnClickListener removeButtonListener = new Button.OnClickListener() {
+		@Override
 		public void onClick(View v) {
 			final Future<AbstractFoodDAO> fut = ex.submit(new RemoveFood(new EvrythngFoodDAO(uriInTag)));
 			try {
@@ -126,6 +143,7 @@ public class FoodVisualizer extends Activity {
 			this.dao = dao;
 		}
 
+		@Override
 		public AbstractFoodDAO call() throws Exception {
 			this.dao.load();
 			return this.dao;
@@ -139,6 +157,7 @@ public class FoodVisualizer extends Activity {
 			this.dao = dao;
 		}
 
+		@Override
 		public AbstractFoodDAO call() throws Exception {
 			this.dao.addToFreezer();
 			return this.dao;
@@ -152,6 +171,7 @@ public class FoodVisualizer extends Activity {
 			this.dao = dao;
 		}
 
+		@Override
 		public AbstractFoodDAO call() throws Exception {
 			this.dao.removeFromFreeezer();
 			return this.dao;
@@ -165,6 +185,7 @@ public class FoodVisualizer extends Activity {
 			this.url = url;
 		}
 
+		@Override
 		public Bitmap call() throws Exception {
 			try {
 				return BitmapFactory.decodeStream((InputStream) new URL(url).getContent());

@@ -1,5 +1,18 @@
+/*
+ * (c) Copyright 2012 EVRYTHNG Ltd London / Zurich
+ * www.evrythng.com
+ * 
+ */
 package org.webofthings.freezeme.dao;
 
+/**
+ * 
+ * Represents the food data.
+ * 
+ * @author Aitor Gómez Goiri
+ * @author Dominique Guinard (domguinard)
+ * 
+ */
 public abstract class AbstractFoodDAO {
 	String name = "";
 	String expiration = "";

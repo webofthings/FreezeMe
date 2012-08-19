@@ -1,3 +1,8 @@
+/*
+ * (c) Copyright 2012 EVRYTHNG Ltd London / Zurich
+ * www.evrythng.com
+ * 
+ */
 package org.webofthings.freezeme;
 
 import android.app.Activity;
@@ -7,6 +12,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * 
+ * This class offers the QR-code scanning feature.
+ * 
+ * @author Dominique Guinard (domguinard)
+ * 
+ */
 public class FreezeMeActivity extends Activity {
 
 	/** Called when the activity is first created. */
@@ -20,9 +32,13 @@ public class FreezeMeActivity extends Activity {
 
 	}
 
+	/**
+	 * Button to start scanning a QR code.
+	 */
 	protected Button.OnClickListener mScanQr = new Button.OnClickListener() {
+		@Override
 		public void onClick(View v) {
-			// launch the scanning app...
+			// launch the scanning app is as easy as that... (using zxing)
 			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
 			startActivityForResult(intent, 0);

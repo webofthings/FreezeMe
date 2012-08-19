@@ -1,5 +1,17 @@
+/*
+ * (c) Copyright 2012 EVRYTHNG Ltd London / Zurich
+ * www.evrythng.com
+ * 
+ */
 package org.webofthings.freezeme.dao;
 
+/**
+ * 
+ * Class to simulate the EVRYTHNG service when developing.
+ * 
+ * @author Aitor Gómez Goiri
+ * 
+ */
 public class FakeFoodDAO extends AbstractFoodDAO {
 	@Override
 	public void load() {

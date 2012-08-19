@@ -16,18 +16,12 @@ import android.util.Log;
 import android.widget.TextView;
 
 /**
- * <h1>NfcExplicitReader.java</h1>
  * 
- * <p>
- * TODO Comment this class
- * </p>
+ * This class explicitely triggers an NFC read (e.g., on a button click).
  * 
  * @author Dominique Guinard (domguinard)
- * @project DiageoLogistics
- * @package org.webofthings.freezeme
- * @copyright 2012 Evrythng Ltd London / Zurich
- **/
-
+ * 
+ */
 public class NfcExplicitReader extends Activity {
 	private NfcAdapter mAdapter;
 	private PendingIntent mPendingIntent;
@@ -45,10 +39,6 @@ public class NfcExplicitReader extends Activity {
 
 		mText = (TextView) findViewById(R.id.tagRead);
 		mText.setText("Please touch a tag!");
-
-		// Get the params (username + password)
-		username = getIntent().getExtras().getString("userName");
-		password = getIntent().getExtras().getString("password");
 
 		// Setup and NFC intent listener...
 		mAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -76,7 +66,6 @@ public class NfcExplicitReader extends Activity {
 	@Override
 	public void onNewIntent(Intent intent) {
 		Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
-		//startActivity(FreezeMeActivity.checkAndGo(this, username, password, intent.getDataString(), true));
 	}
 
 	@Override

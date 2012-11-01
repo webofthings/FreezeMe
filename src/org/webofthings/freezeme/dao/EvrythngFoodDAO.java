@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.evrythng.android.wrapper.evrythng.EvrythngV2Wrapper;
-import com.evrythng.android.wrapper.evrythng.EvrythngV3Wrapper;
-import com.evrythng.android.wrapper.evrythng.model.v2.Property;
+import com.evrythng.android.wrapper.evrythng.EvrythngApiWrapper;
 import com.evrythng.android.wrapper.evrythng.model.v3.UrlBinding;
+import com.evrythng.thng.resource.model.store.Property;
+import com.evrythng.thng.resource.model.store.Thng;
 
 /**
  * 
@@ -24,12 +24,17 @@ import com.evrythng.android.wrapper.evrythng.model.v3.UrlBinding;
  * 
  */
 public class EvrythngFoodDAO extends AbstractFoodDAO {
-	private static final String EVRYTHNG_ROOT_URL_V2 = "https://evrythng.net/";
-	private static final String API_KEY = "<GET-YOUR-API-KEY>";
-	private static final String freezerCollectionId = "<CREATE-YOUR-COLLECTION>";
-	private static final String EVRYTHNG_ROOT_URL_THNGLI = "<THNG-LI-URI>";
+	//	private static final String EVRYTHNG_ROOT_URL_V2 = "https://evrythng.net/";
+	//	private static final String API_KEY = "<GET-YOUR-API-KEY>";
+	//	private static final String freezerCollectionId = "<CREATE-YOUR-COLLECTION>";
+	//	private static final String EVRYTHNG_ROOT_URL_THNGLI = "http://t.tn.gg";
 
-	final EvrythngV2Wrapper wrapper = new EvrythngV2Wrapper(EVRYTHNG_ROOT_URL_V2, API_KEY);
+	private static final String EVRYTHNG_ROOT_URL = "http://api.staging.evrythng.net/";
+	private static final String API_KEY = "MaEDwlYA2Xxp2oSzt9uxbenTTyiYdZgnnVQlGnmnDCiLgfUO2pKzpbhzAeotwpc0KV9J8M2QssIdxOOt";
+	private static final String freezerCollectionId = "504f3e5de4b009ea2f927552";
+	private static final String EVRYTHNG_ROOT_URL_THNGLI = "http://d.tn.gg";
+
+	final EvrythngApiWrapper wrapper = new EvrythngApiWrapper(EVRYTHNG_ROOT_URL, API_KEY);
 	private String thngUrl;
 	private String thngId;
 
@@ -40,16 +45,12 @@ public class EvrythngFoodDAO extends AbstractFoodDAO {
 
 	@Override
 	public void load() {
-		//final Thng getThng = wrapper.get(String.format("thngs/%s", longUrl), Thng.class);
-		final Property<String> nam = wrapper.get(String.format("thngs/%s/properties/%s", thngId, "ProductName"), Property.class);
-		final Property<String> exp = wrapper.get(String.format("thngs/%s/properties/%s", thngId, "ExpiryDate"), Property.class);
-		final Property<String> imgUrl = wrapper.get(String.format("thngs/%s/properties/%s", thngId, "ImageURL"), Property.class);
-		final Property<String> infoUrl = wrapper.get(String.format("thngs/%s/properties/%s", thngId, "ProductURL"), Property.class);
+		Thng thng = wrapper.get(String.format("thngs/%s", thngId), Thng.class);
 
-		this.name = nam.getValue();
-		this.expiration = exp.getValue();
-		this.imageUrl = imgUrl.getValue();
-		this.infoUrl = infoUrl.getValue();
+		this.name = thng.getName();
+		this.expiration = thng.getProperties().get("ExpiryDate");
+		this.imageUrl = thng.getProperties().get("ImageURL");
+		this.infoUrl = thng.getProperties().get("ProductURL");
 	}
 
 	/*
@@ -62,7 +63,7 @@ public class EvrythngFoodDAO extends AbstractFoodDAO {
 		// Add thng to collection
 		ArrayList<String> thngs = new ArrayList<String>();
 		thngs.add(thngId);
-		ArrayList<String> collectUpdated = wrapper.post(String.format("collections/%s/thngs", freezerCollectionId), thngs, ArrayList.class);
+		ArrayList<String> collectUpdated = wrapper.put(String.format("collections/%s/thngs", freezerCollectionId), thngs, ArrayList.class);
 		System.out.println(collectUpdated);
 
 		// Update expire date, here we fake it at now + 1 minute	
@@ -71,13 +72,17 @@ public class EvrythngFoodDAO extends AbstractFoodDAO {
 		int mins = now.getMinutes() + 1;
 		now.setMinutes(mins);
 		String date = formatter.format(now);
-		Property<String> updatedTime = new Property<String>("ExpiryDate", date);
-		Property<String> propertyUpdated = wrapper.put(String.format("thngs/%s/properties/%s", thngId, "ExpiryDate"), updatedTime, Property.class);
+		Property updatedTime = new Property();
+		updatedTime.setKey("ExpiryDate");
+		updatedTime.setValue(date);
+		Property propertyUpdated = wrapper.put(String.format("thngs/%s/properties/%s", thngId, "ExpiryDate"), updatedTime, Property.class);
 		this.expiration = date;
 
 		// Update notification sent
-		Property<String> updatedSent = new Property<String>("NotificationSent", "false");
-		Property<String> propertyUpdatedSent = wrapper.put(String.format("thngs/%s/properties/%s", thngId, "NotificationSent"), updatedSent, Property.class);
+		Property updatedSent = new Property();
+		updatedTime.setKey("NotificationSent");
+		updatedTime.setValue("false");
+		Property propertyUpdatedSent = wrapper.put(String.format("thngs/%s/properties/%s", thngId, "NotificationSent"), updatedSent, Property.class);
 	}
 
 	/*
@@ -101,7 +106,7 @@ public class EvrythngFoodDAO extends AbstractFoodDAO {
 	}
 
 	private String getLongIdFromShort(String thngUrl) {
-		EvrythngV3Wrapper newWrapper = new EvrythngV3Wrapper(EVRYTHNG_ROOT_URL_THNGLI);
+		EvrythngApiWrapper newWrapper = new EvrythngApiWrapper(EVRYTHNG_ROOT_URL_THNGLI, API_KEY);
 		String id = getId(this.thngUrl);
 		UrlBinding binding = newWrapper.get(id, UrlBinding.class);
 		return binding.getAdId();

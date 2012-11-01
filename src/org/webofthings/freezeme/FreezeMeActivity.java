@@ -38,10 +38,15 @@ public class FreezeMeActivity extends Activity {
 	protected Button.OnClickListener mScanQr = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// launch the scanning app is as easy as that... (using zxing)
+			// Easiest: launch the scanning app is as easy as that... (using zxing)
 			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
 			startActivityForResult(intent, 0);
+
+			//			// Cleanest:
+			//			IntentIntegrator integrator = new IntentIntegrator(FreezeMeActivity.this);
+			//			integrator.initiateScan();
+
 		}
 	};
 
@@ -50,6 +55,7 @@ public class FreezeMeActivity extends Activity {
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		// Easiest:
 		if (requestCode == 0) {
 			if (resultCode == RESULT_OK) {
 				String contents = intent.getStringExtra("SCAN_RESULT");
@@ -60,6 +66,14 @@ public class FreezeMeActivity extends Activity {
 				// Handle cancel
 			}
 		}
+
+		// Cleanest:
+		//		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+		//		if (scanResult != null) {
+		//			// handle scan result
+		//			Intent foodVizuIntent = new Intent(this, FoodVisualizer.class);
+		//			foodVizuIntent.setData(Uri.parse(scanResult.getContents()));
+		//		}
 	}
 
 }

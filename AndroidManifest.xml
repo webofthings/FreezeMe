@@ -38,8 +38,8 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <data
-                    android:host="evrythng.net"
-                    android:scheme="https" />
+                    android:host="d.tn.gg"
+                    android:scheme="http" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

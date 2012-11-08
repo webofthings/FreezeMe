@@ -33,8 +33,8 @@ import android.widget.Toast;
 /**
  * 
  * This class is the activity displaying information about the scanned food
- * item.
- * It also allows the user to add a food item to our fridge hosted on EVRYTHNG
+ * item. It also allows the user to add a food item to our freezer hosted on
+ * EVRYTHNG
  * services.
  * 
  * @author Aitor Gómez Goiri
@@ -42,8 +42,13 @@ import android.widget.Toast;
  * 
  */
 public class FoodVisualizer extends Activity {
-	String urlToAccessMoreInfo = "http://";
-	String uriInTag;
+
+	// Get all the app params
+	private String apiKey;
+	private String freezeCollectionId;
+	private String uriInTag;
+	private String urlToAccessMoreInfo;
+
 	final ExecutorService ex = Executors.newSingleThreadExecutor();
 
 	/** Called when the activity is first created. */
@@ -52,7 +57,10 @@ public class FoodVisualizer extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.visualizer);
 
-		//Load URL that was just read
+		apiKey = getString(R.string.apiKey);
+		freezeCollectionId = getString(R.string.freezerCollectionId);
+
+		// Load URL that was just read
 		uriInTag = this.getIntent().getData().toString();
 
 		Button removeBtn = (Button) findViewById(R.id.button2);
@@ -63,7 +71,8 @@ public class FoodVisualizer extends Activity {
 
 		// Load food data
 		Log.d(AppData.log, uriInTag);
-		final Future<AbstractFoodDAO> fut = this.ex.submit(new DataLoader(new EvrythngFoodDAO(uriInTag)));//new FakeFoodDAO())); // Ignore the Future<>
+
+		final Future<AbstractFoodDAO> fut = this.ex.submit(new DataLoader(new EvrythngFoodDAO(uriInTag, apiKey, freezeCollectionId)));
 		try {
 			final AbstractFoodDAO data = fut.get();
 
@@ -75,53 +84,52 @@ public class FoodVisualizer extends Activity {
 			final TextView lblDaysLeft = (TextView) findViewById(R.id.textView2);
 			lblDaysLeft.setText("Expires on:" + " " + data.getExpiration());
 
-			final Future<Bitmap> imgFut = this.ex.submit(new ImageLoader(data.getImageUrl()));//new FakeFoodDAO())); // Ignore the Future<>
+			final Future<Bitmap> imgFut = this.ex.submit(new ImageLoader(data.getImageUrl()));
 			Bitmap bitmap = imgFut.get();
 			ImageView i = (ImageView) findViewById(R.id.imageView1);
 			i.setImageBitmap(bitmap);
 		} catch (InterruptedException e) {
-			Log.d(AppData.log, e.getMessage());
+			Log.e(AppData.log, e.getMessage());
 		} catch (ExecutionException e) {
-			Log.d(AppData.log, e.getMessage());
+			Log.e(AppData.log, e.getMessage());
 		}
 
 	}
 
+	/**
+	 * Button to put food items in the freezer.
+	 */
 	protected Button.OnClickListener addButtonListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			final Future<AbstractFoodDAO> fut = ex.submit(new AddFood(new EvrythngFoodDAO(uriInTag)));
+			final Future<AbstractFoodDAO> fut = ex.submit(new AddFood(new EvrythngFoodDAO(uriInTag, apiKey, freezeCollectionId)));
 			try {
 				final AbstractFoodDAO data = fut.get();
 				Toast.makeText(FoodVisualizer.this, "Added to Freezer on EVRYTHNG!", 0).show();
 
-				final TextView lblDaysLeft = (TextView) findViewById(R.id.textView2);
-				lblDaysLeft.setText("Expires on:" + " " + data.getExpiration());
-
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(AppData.log, e.getMessage());
 			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(AppData.log, e.getMessage());
 			}
 		}
 	};
 
+	/**
+	 * Button to remove food items from the freezer.
+	 */
 	protected Button.OnClickListener removeButtonListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			final Future<AbstractFoodDAO> fut = ex.submit(new RemoveFood(new EvrythngFoodDAO(uriInTag)));
+			final Future<AbstractFoodDAO> fut = ex.submit(new RemoveFood(new EvrythngFoodDAO(uriInTag, apiKey, freezeCollectionId)));
 			try {
 				final AbstractFoodDAO data = fut.get();
 				Toast.makeText(FoodVisualizer.this, "Removed from Freezer on EVRYTHNG!", 0).show();
 
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(AppData.log, e.getMessage());
 			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(AppData.log, e.getMessage());
 			}
 		}
 	};
@@ -190,10 +198,10 @@ public class FoodVisualizer extends Activity {
 			try {
 				return BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
 			} catch (MalformedURLException e) {
-				Log.d(AppData.log, e.getMessage());
+				Log.e(AppData.log, e.getMessage());
 			} catch (IOException e) {
-				Log.d(AppData.log, "Something went wrong loading the image");
-				Log.d(AppData.log, e.getMessage());
+				Log.e(AppData.log, "Something went wrong while loading the image");
+				Log.e(AppData.log, e.getMessage());
 			}
 			return null;
 		}

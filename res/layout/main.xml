@@ -18,5 +18,13 @@
             android:background="@drawable/bt_red"
             android:text="@string/scan" >
         </Button>
+        
+         <Button
+            android:id="@+id/scanNfcButton"
+            style="@style/ButtonText"
+            android:layout_width="match_parent"
+            android:background="@drawable/bt_red"
+            android:text="@string/scanNfc" >
+        </Button>
 
 </LinearLayout>

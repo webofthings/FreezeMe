@@ -14,7 +14,7 @@ import android.widget.Button;
 
 /**
  * 
- * This class offers the QR-code scanning feature.
+ * This class offers the QR-code scanning feature using the zxing application.
  * 
  * @author Dominique Guinard (domguinard)
  * 
@@ -30,6 +30,9 @@ public class FreezeMeActivity extends Activity {
 		Button scanQrBtn = (Button) findViewById(R.id.scanButton);
 		scanQrBtn.setOnClickListener(mScanQr);
 
+		Button scanNfcBtn = (Button) findViewById(R.id.scanNfcButton);
+		scanNfcBtn.setOnClickListener(mReadNfc);
+
 	}
 
 	/**
@@ -38,15 +41,25 @@ public class FreezeMeActivity extends Activity {
 	protected Button.OnClickListener mScanQr = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// Easiest: launch the scanning app is as easy as that... (using zxing)
+			// Easiest: launch the scanning app is as easy as that... (using the zxing application)
 			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
 			startActivityForResult(intent, 0);
 
-			//			// Cleanest:
+			//			// Cleanest (because it will launch the market in case the zxing isn't installed):
 			//			IntentIntegrator integrator = new IntentIntegrator(FreezeMeActivity.this);
 			//			integrator.initiateScan();
 
+		}
+	};
+
+	/**
+	 * Button to start scanning a QR code.
+	 */
+	protected Button.OnClickListener mReadNfc = new Button.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			startActivity(new Intent(v.getContext(), NfcExplicitReader.class));
 		}
 	};
 

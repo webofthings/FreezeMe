@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       <!--  Explicit triggered tag read -->    
+       <!--  This activity can be used to explicitly trigger an NFC read  -->    
        <activity
             android:name=".NfcExplicitReader" >
             <intent-filter>
@@ -38,8 +38,8 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <data
-                    android:host="d.tn.gg"
-                    android:scheme="http" />
+                    android:host="api.evrythng.com"
+                    android:scheme="https" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

@@ -9,15 +9,15 @@ package org.webofthings.freezeme.dao;
  * 
  * Represents the food data.
  * 
- * @author Aitor Gómez Goiri
  * @author Dominique Guinard (domguinard)
+ * @author Aitor Gómez Goiri
  * 
  */
 public abstract class AbstractFoodDAO {
-	String name = "";
-	String expiration = "";
-	String imageUrl = "";
-	String infoUrl = "";
+	private String name;
+	private String expiration;
+	private String imageUrl;
+	private String infoUrl;
 
 	/**
 	 * This loads the data related to a food item.
@@ -49,5 +49,21 @@ public abstract class AbstractFoodDAO {
 
 	public String getInfoUrl() {
 		return infoUrl;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setExpiration(String expiration) {
+		this.expiration = expiration;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public void setInfoUrl(String infoUrl) {
+		this.infoUrl = infoUrl;
 	}
 }

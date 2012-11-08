@@ -12,10 +12,9 @@ import android.widget.Toast;
 
 /**
  * This is the class in charge of reading NFC tags, it is triggered
- * automatically
- * by the Android system whenever a tag corresponding to what's specified in the
- * AndroidManifest.xml
- * is seen (e.g., tags with evrythng.net in our case).
+ * automatically by the Android system whenever a tag corresponding to what's
+ * specified in the
+ * AndroidManifest.xml is seen (e.g., tags with evrythng.com in our case).
  * 
  * @author Dominique Guinard (domguinard)
  **/
@@ -26,6 +25,8 @@ public class NfcTriggeredReader extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		// The data that was read from the tag (i.e., a url) is put in the
+		// intent by Android
 		Intent intent = getIntent();
 		String uri = intent.getData().toString();
 

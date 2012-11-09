@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="apiKey">YOUR_API_KEY</string>
+   <string name="apiKey">YOUR_API_KEY</string>
     <string name="freezerCollectionId">YOUR_COLLECTION_ID</string>
     
     <string name="title">FreezeMe!</string>

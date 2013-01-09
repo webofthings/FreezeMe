@@ -5,15 +5,13 @@
  */
 package org.webofthings.freezeme.dao;
 
-import java.util.List;
-
-import com.evrythng.java.wrapper.ApiConfiguration;
+import android.util.Log;
 import com.evrythng.java.wrapper.ApiManager;
-import com.evrythng.java.wrapper.core.EvrythngApiBuilder.Builder;
 import com.evrythng.java.wrapper.exception.EvrythngClientException;
 import com.evrythng.java.wrapper.exception.EvrythngException;
 import com.evrythng.java.wrapper.service.ThngService;
-import com.evrythng.thng.resource.model.store.Property;
+import com.evrythng.thng.commons.config.ApiConfiguration;
+import com.evrythng.thng.resource.model.store.Thng;
 
 /**
  * 
@@ -43,20 +41,13 @@ public class EvrythngFoodDAO extends AbstractFoodDAO {
 	public void load() {
 		ThngService thngService = apiManager.thngService();
 		try {
-			Builder<List<Property>> thngPropertiesReader = thngService.propertiesReader(thngId);
-			List<Property> results = thngPropertiesReader.execute();
-
-			for (Property currentProp : results) {
-				if (currentProp.getKey().equalsIgnoreCase("ExpiryDate")) {
-					setExpiration(currentProp.getValue());
-				} else if (currentProp.getKey().equalsIgnoreCase("ImageURL")) {
-					setImageUrl(currentProp.getValue());
-				} else if (currentProp.getKey().equalsIgnoreCase("ProductURL")) {
-					setInfoUrl(currentProp.getValue());
-				}
-			}
+            Thng item = thngService.thngReader(thngId).execute();
+            setExpiration(item.getProperties().get("ExpiryDate"));
+            setImageUrl(item.getProperties().get("ImageURL"));
+            setInfoUrl(item.getProperties().get("ProductURL"));
+            setName(item.getName());
 		} catch (EvrythngException e) {
-			e.printStackTrace();
+            Log.e("FREEZEME", "An error occurred while loading the thng: " + e);
 		}
 	}
 
@@ -76,9 +67,9 @@ public class EvrythngFoodDAO extends AbstractFoodDAO {
 			apiManager.thngService().propertyUpdater(thngId, "NotificationSent", "false").execute();
 
 		} catch (EvrythngClientException e) {
-			e.printStackTrace();
-		} catch (EvrythngException e) {
-			e.printStackTrace();
+            Log.e("FREEZEME", "An error occurred while adding to freezer: " + e);
+        } catch (EvrythngException e) {
+            Log.e("FREEZEME", "An error occurred while adding to freezer: " + e);
 		}
 	}
 
@@ -95,9 +86,9 @@ public class EvrythngFoodDAO extends AbstractFoodDAO {
 			apiManager.collectionService().thngRemover(freezerCollectionId, thngId).execute();
 
 		} catch (EvrythngClientException e) {
-			e.printStackTrace();
+            Log.e("FREEZEME", "An error occurred while removing from freezer: " + e);
 		} catch (EvrythngException e) {
-			e.printStackTrace();
+            Log.e("FREEZEME", "An error occurred while removing from freezer: " + e);
 		}
 	}
 

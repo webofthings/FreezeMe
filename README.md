@@ -1,6 +1,4 @@
-FreezeMe
-
-This is an example Android app reading QR, barcodes and NFC tags, based on the [http://evrythng.com] API and its [https://github.com/evrythng/evrythng-tools Android / Java wrapper].
+This is an example Android app reading QR, barcodes and NFC tags, based on the [EVRYTHNG API](https://api.evrythng.com) and its [Android / Java wrapper](https://github.com/evrythng/evrythng-tools)
 
 This app demonstrates:
 * How to connect real-world objects to the Web through NFC and QR codes
@@ -9,4 +7,4 @@ This app demonstrates:
 
 All these points are documented in the source code. Enjoy!
 
-[http://www.webofthings.org]
+http://www.webofthings.org

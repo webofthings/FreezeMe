@@ -1,8 +1,6 @@
 FreezeMe
-========
 
-WoT 2012 Hackaton App for frozen food management!
-Based on the http://evrythng.net API and the ThngDroid https://github.com/webofthings/ThngDroid/ Android REST library.
+This is an example Android app reading QR, barcodes and NFC tags, based on the [http://evrythng.com] API and its [Android / Java wrapper].
 
 This app demonstrates:
 * How to connect real-world objects to the Web through NFC and QR codes
@@ -11,4 +9,4 @@ This app demonstrates:
 
 All these points are documented in the source code. Enjoy!
 
-http://www.webofthings.org
+[http://www.webofthings.org]

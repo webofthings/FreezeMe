@@ -1,4 +1,4 @@
-This is an example Android app reading QR, barcodes and NFC tags, based on the [EVRYTHNG API](https://api.evrythng.com) and its [Android / Java wrapper](https://github.com/evrythng/evrythng-tools)
+This is an example Android app reading QR, barcodes and NFC tags, based on the [EVRYTHNG API](https://dev.evrythng.com) and its [Android / Java wrapper](https://github.com/evrythng/evrythng-tools)
 
 This app demonstrates:
 * How to connect real-world objects to the Web through NFC and QR codes
